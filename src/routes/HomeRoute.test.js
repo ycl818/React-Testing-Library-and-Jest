@@ -3,27 +3,44 @@ import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { MemoryRouter } from "react-router-dom";
 import HomeRoute from "./HomeRoute";
+import { createServer } from "../test/server";
 
-const handler = [
-  rest.get("/api/repositories", (req, res, ctx) => {
-    const language = req.url.searchParams.get("q").split("language:")[1];
-    console.log(language);
-    return res(
-      ctx.json({
+// Goal:
+createServer([
+  {
+    path: "/api/repositories",
+    res: (req, res, ctx) => {
+      const language = req.url.searchParams.get("q").split("language:")[1];
+      return {
         items: [
           { id: 1, full_name: `${language}_one` },
           { id: 2, full_name: `${language}_two` },
         ],
-      })
-    );
-  }),
-];
+      };
+    },
+  },
+]);
 
-const server = setupServer(...handler);
+// const handler = [
+//   rest.get("/api/repositories", (req, res, ctx) => {
+//     const language = req.url.searchParams.get("q").split("language:")[1];
+//     console.log(language);
+//     return res(
+//       ctx.json({
+//         items: [
+//           { id: 1, full_name: `${language}_one` },
+//           { id: 2, full_name: `${language}_two` },
+//         ],
+//       })
+//     );
+//   }),
+// ];
 
-beforeAll(() => server.listen()); // before any test runs, start the server
-afterEach(() => server.resetHandlers()); // reset handlers after each test
-afterAll(() => server.close()); // once all tests are done, close the server
+// const server = setupServer(...handler);
+
+// beforeAll(() => server.listen()); // before any test runs, start the server
+// afterEach(() => server.resetHandlers()); // reset handlers after each test
+// afterAll(() => server.close()); // once all tests are done, close the server
 
 test("renders two links for each language", async () => {
   render(
