@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import RepositoriesListItem from "./RepositoriesListItem";
 import { MemoryRouter } from "react-router-dom";
 
@@ -23,15 +23,17 @@ function renderComponent() {
       <RepositoriesListItem repository={repository} />
     </MemoryRouter>
   );
+
+  return { repository };
 }
 
 test("shows a link to the github hompage for this repo", async () => {
-  renderComponent();
+  const { repository } = renderComponent();
 
-  await act(async () => {
-    await pause();
+  await screen.findByRole("img", { name: "JavaScript" });
+
+  const link = screen.getByRole("link", {
+    name: /github repository/i,
   });
-  // await screen.findByRole("img", { name: "JavaScript" });
+  expect(link).toHaveAttribute("href", repository.html_url);
 });
-
-const pause = () => new Promise((resolve) => setTimeout(resolve, 100));
