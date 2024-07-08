@@ -1,13 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import RepositoriesListItem from "./RepositoriesListItem";
 import { MemoryRouter } from "react-router-dom";
-import { async } from "validate.js";
 
-jest.mock("../tree/FileIcon", () => {
-  return () => {
-    return "File Icon Component";
-  };
-});
+// jest.mock("../tree/FileIcon", () => {
+//   return () => {
+//     return "File Icon Component";
+//   };
+// });
 
 function renderComponent() {
   const repository = {
@@ -29,13 +28,10 @@ function renderComponent() {
 test("shows a link to the github hompage for this repo", async () => {
   renderComponent();
 
+  await act(async () => {
+    await pause();
+  });
   // await screen.findByRole("img", { name: "JavaScript" });
 });
 
-// const pause = () => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve();
-//     }, 100);
-//   });
-// };
+const pause = () => new Promise((resolve) => setTimeout(resolve, 100));
