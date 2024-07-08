@@ -7,13 +7,19 @@ import { MemoryRouter } from "react-router-dom";
 //     return "File Icon Component";
 //   };
 // });
+// Mock FileIcon to avoid the state update warning
+jest.mock("../tree/FileIcon", () => {
+  return () => <img alt="JavaScript" className="js-icon" />;
+});
 
 function renderComponent() {
   const repository = {
     full_name: "facebook/react",
     language: "JavaScript",
     description: "react library",
-    owner: "facebook",
+    owner: {
+      login: "facebook",
+    },
     name: "react",
     html_url: "https://github.com/facebook/react",
   };
@@ -36,4 +42,22 @@ test("shows a link to the github hompage for this repo", async () => {
     name: /github repository/i,
   });
   expect(link).toHaveAttribute("href", repository.html_url);
+});
+
+test("shows a fileicon with the appropriate icon", async () => {
+  renderComponent();
+
+  const icon = await screen.findByRole("img", { name: "JavaScript" });
+
+  expect(icon).toHaveClass("js-icon");
+});
+
+test("shows a link to the code editor page", async () => {
+  const { repository } = renderComponent();
+
+  const link = await screen.findByRole("link", {
+    name: new RegExp(repository.owner.login),
+  });
+
+  expect(link).toHaveAttribute("href", `/repositories/${repository.full_name}`);
 });
