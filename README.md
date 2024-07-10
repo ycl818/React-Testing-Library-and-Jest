@@ -88,3 +88,20 @@ Best -> Worst
 3. Create a MSW handler to intercept that request and return somoe fake data for your component to use
 4. Set up the beforeAll, afterEach, and afterALl hooks in yout test file
 5. In a test, render the component. Wait for an element to be visible
+
+### Options for Debugginf Tests
+1. Use 'test.only' or 'describe.only' to limit the number of tests executed
+2. Set up a debugger
+3. Classic console.log's
+
+### Setting up a Debugger
+1. Add the following script to package.json:
+    * "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+2. Add a 'debugger' statement somewhere in your tests or component
+3. Use a "test.only" or "describe.only" to limit the tests executed
+4. Run the above script command
+5. Navigate to *about:inspect* in yout browser
+
+### Testing may happen sometihing unexpectively
+1. see some stategies for debugging tests
+2. Understand that some libraries don't magically do what you want in a test environment.
